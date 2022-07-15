@@ -7,12 +7,12 @@
         </template>
         </van-nav-bar>
       <!-- 表单 -->
-    <van-form @submit="login" class="form">
+    <van-form @submit="login" class="form" ref="form">
         <van-field
             v-model="moblie"
             name="moblie"
             placeholder="请输入手机号"
-            :rules="[{ required: true, message: '请输入手机号' }]"
+            :rules="moblieRules"
         >
         <template #label>
             <span class="toutiao toutiao-shouji"></span>
@@ -22,13 +22,14 @@
             v-model="code"
             name="code"
             placeholder="请输入验证码"
-            :rules="[{ required: true, message: '请输入验证码' }]"
+            :rules="codeRiles"
         >
         <template #label>
         <span class="toutiao toutiao-yanzhengma"></span>
         </template>
         <template #button>
-          <van-button class="send-sms-btn" round size="small" type="default">发送验证码</van-button>
+          <van-count-down :time=" 60 * 1000 " v-if="isShowCount" @finish=" isShowCount = false" format="ss s"/>
+          <van-button class="send-sms-btn" round size="small" type="default" @click.stop.prevent="sendSmsFn" v-else >发送验证码</van-button>
         </template>
         </van-field>
       <!-- 登录按钮 -->
@@ -41,12 +42,16 @@
 </template>
 
 <script>
-import { login } from '@/api/user'
+import { moblieRules, codeRiles } from '@/views/Login/rules.js'
+import { login, sendCode } from '@/api/user'
 export default {
   data () {
     return {
       moblie: '',
-      code: ''
+      code: '',
+      moblieRules,
+      codeRiles,
+      isShowCount: false
     }
   },
   methods: {
@@ -57,8 +62,36 @@ export default {
       this.$router.back()
     },
     async login () {
-      const res = await login(this.moblie, this.code)
-      console.log(res)
+      this.$toast.loading({
+        message: '加载中...',
+        forbidClick: true
+      })
+      try {
+        const res = await login(this.moblie, this.code)
+        this.$store.commit('setUser', res.data.data)
+        // 登录成功跳转页面
+        this.$router.push('/profile')
+        this.$toast.success('登录成功')
+      } catch (error) {
+        const status = error.response.status
+        status === 400 ? this.$toast.fail(error.response.data.message) : this.$toast.fail('登录错误，刷新重试')
+      }
+    },
+    async sendSmsFn () {
+      try {
+        // 点击发送验证码的时候校验手机号格式---若手机号格式错误 则不发送请求
+        await this.$refs.form.validate('moblie')
+        await sendCode(this.moblie)
+        this.isShowCount = true
+      } catch (error) {
+        if (!error.response) {
+          this.$toast.fail('手机号格式错误')
+        } else {
+          if (error.response.status === 429 || error.response.status === 429) {
+            this.$toast(error.response.data.message)
+          }
+        }
+      }
     }
 
   }
