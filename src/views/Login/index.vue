@@ -68,6 +68,7 @@ export default {
       })
       try {
         const res = await login(this.moblie, this.code)
+        console.log(res)
         this.$store.commit('setUser', res.data.data)
         // 登录成功跳转页面
         this.$router.push('/profile')
