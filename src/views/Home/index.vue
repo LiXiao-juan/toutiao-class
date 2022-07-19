@@ -2,7 +2,7 @@
   <div>
     <van-nav-bar class="navbar">
       <template #title>
-        <van-button round>
+        <van-button round @click="searchBtn">
           <van-icon name="search" />
           搜索
         </van-button>
@@ -81,6 +81,9 @@ export default {
       } catch (error) {
         this.$toast.fail('请重新获取频道')
       }
+    },
+    searchBtn () {
+      this.$router.push('/search')
     },
     showPopup () {
       this.$refs.popup.isShow = true
