@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bgc">
     <form action="/">
       <van-search
         v-model="keywords"
@@ -19,11 +19,14 @@
 import History from '@/views/Search/components/SearchHistory.vue'
 import Result from '@/views/Search/components/SearchResult.vue'
 import Suggestion from '@/views/Search/components/SearchSuggestion.vue'
+import storage from '@/utils/storage'
 export default {
-  data () {
+  name: 'Search',
+  data() {
     return {
       keywords: '',
-      isEnter: false
+      isEnter: false,
+      history: storage.get('HISTORY') || []
     }
   },
   components: {
@@ -32,19 +35,20 @@ export default {
     Suggestion
   },
   methods: {
-    onSearch (val) {
+    onSearch(val) {
       //   this.$toast(val)
+      this.history.unshift(this.keywords)
       this.isEnter = true
     },
-    onCancel () {
+    onCancel() {
       this.$router.back()
     },
-    visibleSearchSuggestion () {
+    visibleSearchSuggestion() {
       this.isEnter = false
     }
   },
   computed: {
-    comName () {
+    comName() {
       // 判断输入框是否为空
       if (this.keywords.trim() === '') {
         return 'History'
@@ -56,6 +60,14 @@ export default {
 
       return 'Suggestion'
     }
+  },
+  watch: {
+    history: {
+      deep: true,
+      handler(val) {
+        storage.set('HISTORY', val)
+      }
+    }
   }
 }
 </script>
@@ -65,5 +77,8 @@ export default {
   .van-search__action {
     color: #fff;
   }
+}
+.bgc {
+  background-color: #f5f7f9;
 }
 </style>

@@ -24,7 +24,7 @@
         <!-- 右边 -->
         <van-col span="11">
           <van-row type="flex" justify="end" align="center">
-            <van-button class="send-sms-btn" round size="small" type="default">编辑资料</van-button>
+            <van-button class="send-sms-btn" round size="small" type="default" @click="$router.push('/user')">编辑资料</van-button>
           </van-row>
         </van-col>
       </van-row>

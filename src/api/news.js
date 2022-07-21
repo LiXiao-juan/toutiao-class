@@ -9,3 +9,14 @@ export const getArticlesList = (channelId, timestamp) => {
     }
   })
 }
+
+/**
+ *
+ * @param {String} id //文章id
+ * @returns Promise
+ */
+export const getArticlesInfo = (id) => {
+  return request({
+    url: `/v1_0/articles/${id}`
+  })
+}

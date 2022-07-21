@@ -1,6 +1,10 @@
 <template>
   <div>
-    <van-cell v-for="(item, index) in highlight" :key="index">
+    <van-cell
+      v-for="(item, index) in highlight"
+      :key="index"
+      @click="getSearchResult(index)"
+    >
       <template #icon>
         <van-icon name="search" class="search-icon" />
       </template>
@@ -37,6 +41,16 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    // 点击后获取搜索结果
+    getSearchResult(ind) {
+      // 改变父元素的keywords的值
+      this.$parent.keywords = this.suggestion[ind]
+
+      this.$parent.history.unshift(this.suggestion[ind])
+
+      // 改变父元素里isEnter的值显示搜索结果
+      this.$parent.isEnter = true
     }
   },
   watch: {
