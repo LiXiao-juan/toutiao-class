@@ -54,8 +54,6 @@ export default {
     },
     // 加载事件
     async onLoad() {
-      // 页数 +1
-      this.page++
       // 改变加载状态
       const res = await getSearchResults(this.keywords, this.page, this.perPage)
       this.resultsList.push(...res.data.data.results)
