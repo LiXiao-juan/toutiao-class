@@ -31,3 +31,13 @@ export const getUserInfo = () => {
     }
   })
 }
+
+/**
+ *  获取用户资料
+ * @returns promise
+ */
+export const getUserProfile = () => {
+  return request({
+    url: '/v1_0/user/profile'
+  })
+}
