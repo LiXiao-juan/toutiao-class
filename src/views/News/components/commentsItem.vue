@@ -12,7 +12,7 @@
           </div>
           <div class="commentTime">
             <span>{{ pubdate || '暂无' }}</span>
-            <van-button class="huifuBtn" @click="showCommentArea = true"
+            <van-button class="huifuBtn" @click="isShowComment = true"
               >回复0</van-button
             >
           </div>
@@ -24,46 +24,57 @@
       </van-cell>
     </van-cell-group>
 
-    <!-- 弹框区域 -->
     <van-popup
-      v-model="showCommentArea"
-      closeable
-      close-icon="arrow-left"
+      v-model="isShowComment"
       position="bottom"
       :style="{ height: '100%' }"
+      closeable
       close-icon-position="top-left"
+      close-icon="arrow-left"
     >
+      <!-- 组件 -->
+      <commentReply
+        :commentList="commentList"
+        :id="commentList.com_id"
+        :num="commentList.reply_count"
+      ></commentReply>
     </van-popup>
   </div>
 </template>
 
 <script>
+import commentReply from './PopUp.vue'
 import dayjs from '@/utils/dayjs'
 import { getlikings } from '@/api/news'
 export default {
   name: 'sareItem',
+  data() {
+    return {
+      isShowComment: false
+    }
+  },
   props: {
     commentList: {
       type: Object
     }
   },
-  data() {
-    return {
-      showCommentArea: false
-    }
+  components: {
+    commentReply
   },
-  created() {},
+  created() {
+    console.log(this.commentList)
+  },
   computed: {
     pubdate() {
-      const art = this.commentList
-      const time = dayjs(art.pubdate).fromNow()
+      const time = dayjs(this.commentList.pubdate).fromNow()
       return time
     }
   },
   methods: {
     async likingBtn() {
       try {
-        await getlikings(this.commentList.com_id)
+        const res = await getlikings(this.commentList.com_id)
+        console.log(res)
       } catch (error) {}
     }
   }

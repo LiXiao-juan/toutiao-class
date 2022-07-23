@@ -41,7 +41,7 @@
     </div>
 
     <!-- 主体内容区域 -->
-    <div class="article-content markdown-body" v-html="article.content"></div>
+    <div class="article-content markdown-body" v-html="article.content" id="article-content"></div>
 
     <van-divider>正文结束</van-divider>
 
@@ -113,6 +113,7 @@
 </template>
 
 <script>
+// import { ImagePreview } from 'vant'
 import getCommentItem from './components/commentsItem.vue'
 import './news.css'
 import dayjs from '@/utils/dayjs'
@@ -156,7 +157,8 @@ export default {
       commentArea: '',
       isCollect: false,
       isAddGood: false,
-      lastCommentId: ''
+      lastCommentId: '',
+      imgList: [] // 图片元素数组
     }
   },
   created() {
@@ -165,6 +167,31 @@ export default {
     // 调用评论信息
     this.getcomment()
   },
+
+  // 图片预览
+  // mounted() {
+  //   this.$nextTick(() => {
+  //     // getElementById动态获取出的所有的img元素
+  //     this.imgList = document
+  //       .getElementById('acticle-content')
+  //       .querySelectorAll('img')
+  //     // 声明空数组---vant组件使用
+  //     const imgSrc = []
+  //     this.imgList.forEach((item, index) => {
+  //       // 将每一个img的src 路径存到空数组
+  //       imgSrc.push(item.src)
+  //       // 给每一个img元素绑定点击事件触发预览
+  //       item.addEventListener('click', () => {
+  //         console.log(1111)
+  //         ImagePreview({
+  //           images: imgSrc,
+  //           closeable: true,
+  //           startPosition: index
+  //         })
+  //       })
+  //     })
+  //   })
+  // },
   methods: {
     // 收藏
     async star() {
@@ -190,6 +217,7 @@ export default {
         this.article = data.data
         // 获取文章最初的收藏状态
         this.isCollect = data.data.is_collected
+        console.log(this.article)
       } catch (error) {}
     },
     // 评论触底事件
@@ -207,7 +235,7 @@ export default {
         this.comment.push(...data.data.results)
         if (data.data.last_id === data.data.end_id) {
           this.loading = true
-          return (this.finished = true)
+          this.finished = true
         }
       } catch (error) {}
     },
@@ -217,6 +245,7 @@ export default {
         const { data } = await getcomment('a', this.$store.state.ArtId)
         this.comment = data.data.results
         this.lastCommentId = data.data.last_id
+        console.log(data.data)
       } catch (error) {
         this.$toast.fail(error.message)
       }
