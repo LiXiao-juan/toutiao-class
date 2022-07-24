@@ -234,6 +234,11 @@ export default {
           this.lastCommentId,
           '10'
         )
+        if (data.data.total_count <= this.comment.length) {
+          this.loading = true
+          this.finished = true
+          return
+        }
         this.loading = false
         this.lastCommentId = data.data.last_id
         this.comment.push(...data.data.results)
