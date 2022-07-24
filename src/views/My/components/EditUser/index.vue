@@ -14,6 +14,7 @@
         v-model="isShowImg"
         v-if="isShowImg"
         :transition-appear="true"
+        :style="{ height: '100%', backgroundColor: '#000', width: '100%' }"
       >
         <UpPopup :imgSrc="imgSrc" @change="isShowImgFn"></UpPopup>
       </van-popup>

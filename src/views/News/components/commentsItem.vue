@@ -13,13 +13,17 @@
           <div class="commentTime">
             <span>{{ pubdate || '暂无' }}</span>
             <van-button class="huifuBtn" @click="isShowComment = true"
-              >回复0</van-button
+              >回复{{ commentList.reply_count }}</van-button
             >
           </div>
         </template>
         <template #default>
-          <van-icon name="good-job-o" @click="likingBtn" />
-          <span>赞</span>
+          <van-icon
+            name="good-job-o"
+            @click="likingBtn"
+            :class="{ loveBtn: commentList.is_liking === true }"
+          />
+          <span>赞{{ commentList.like_count }}</span>
         </template>
       </van-cell>
     </van-cell-group>
@@ -36,7 +40,6 @@
       <commentReply
         :commentList="commentList"
         :id="commentList.com_id"
-        :num="commentList.reply_count"
       ></commentReply>
     </van-popup>
   </div>
@@ -46,6 +49,7 @@
 import commentReply from './PopUp.vue'
 import dayjs from '@/utils/dayjs'
 import { getlikings } from '@/api/news'
+import { delCommitLikings } from '@/api/comment'
 export default {
   name: 'sareItem',
   data() {
@@ -61,9 +65,7 @@ export default {
   components: {
     commentReply
   },
-  created() {
-    console.log(this.commentList)
-  },
+  created() {},
   computed: {
     pubdate() {
       const time = dayjs(this.commentList.pubdate).fromNow()
@@ -72,10 +74,19 @@ export default {
   },
   methods: {
     async likingBtn() {
-      try {
-        const res = await getlikings(this.commentList.com_id)
-        console.log(res)
-      } catch (error) {}
+      // 判断若一开始未点赞  则发起点赞请求
+      if (!this.commentList.is_liking) {
+        try {
+          await getlikings(this.commentList.com_id)
+          this.$toast.success('点赞成功')
+        } catch (error) {}
+      } else {
+        try {
+          await delCommitLikings(this.commentList.com_id)
+          this.$toast('点赞取消')
+        } catch (error) {}
+      }
+      console.log(this.$parent)
     }
   }
 }
@@ -128,5 +139,8 @@ export default {
   display: flex;
   align-items: center;
   color: #333;
+}
+.loveBtn {
+  color: red;
 }
 </style>

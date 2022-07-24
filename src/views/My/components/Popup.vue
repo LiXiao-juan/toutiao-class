@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div style="margin-top: 80px; background-color: #000 ; height: 100%;">
-      <img :src="imgSrc" alt="" ref="img" style="width: 375px; height: 480px" />
+    <div style="margin-top: 80px; background-color: #000 ; width: 100%;">
+      <img :src="imgSrc" alt="" ref="img" style="width: 100%; " />
       <span @click="imgConfirm" class="confirm">确认</span>
       <span @click="imgCancel" class="cancel">取消</span>
     </div>

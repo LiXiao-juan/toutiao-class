@@ -79,7 +79,7 @@
       <van-tabbar-item class="first-nav" @click="showComment = true"
         >写评论</van-tabbar-item
       >
-      <van-badge :content="article.comm_count" class="news">
+      <van-badge :content="totalCount" class="news">
         <van-tabbar-item icon="comment-o"></van-tabbar-item>
       </van-badge>
       <!-- <van-tabbar-item icon="star-o" ref="star" @click="star"></van-tabbar-item> -->
@@ -134,6 +134,7 @@ import {
   delGoods
 } from '@/api/news'
 export default {
+  name: 'News',
   components: {
     getCommentItem
   },
@@ -163,7 +164,8 @@ export default {
       isCollect: false,
       isAddGood: false,
       lastCommentId: '',
-      imgList: [] // 图片元素数组
+      imgList: [],
+      totalCount: 0 // 图片元素数组
     }
   },
   created() {
@@ -200,9 +202,8 @@ export default {
         this.article = data.data
 
         this.$nextTick(() => {
-          // getElementById动态获取出的所有的img元素
+          // this.$refs.contentText获取出的所有的img元素
           this.imgList = this.$refs.contentText.querySelectorAll('img')
-          console.log(this.imgList)
           // 声明空数组---vant组件使用
           const imgSrc = []
           this.imgList.forEach((item, index) => {
@@ -210,7 +211,6 @@ export default {
             imgSrc.push(item.src)
             // 给每一个img元素绑定点击事件触发预览
             item.addEventListener('click', () => {
-              console.log(1111)
               ImagePreview({
                 images: imgSrc,
                 closeable: true,
@@ -222,7 +222,6 @@ export default {
 
         // 获取文章最初的收藏状态
         this.isCollect = data.data.is_collected
-        console.log(this.article)
       } catch (error) {}
     },
     // 评论触底事件
@@ -250,7 +249,7 @@ export default {
         const { data } = await getcomment('a', this.$store.state.ArtId)
         this.comment = data.data.results
         this.lastCommentId = data.data.last_id
-        console.log(data.data)
+        this.totalCount = data.data.total_count
       } catch (error) {
         this.$toast.fail(error.message)
       }

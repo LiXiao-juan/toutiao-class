@@ -1,7 +1,7 @@
 <template>
   <div class="popInfo">
     <!-- 标题 -->
-    <van-nav-bar :title="num ? `${num}条回复` : '暂无回复'" />
+    <van-nav-bar :title="count ? `${count}条回复` : '暂无回复'" />
     <!-- 评论内容 -->
     <van-list
       v-model="Listloading"
@@ -31,7 +31,7 @@
               name="good-job-o"
               :class="{ loveBtn: isLiking === true }"
             />
-            <span @click="likeFn">赞</span>
+            <span @click="likeFn">赞{{ commentList.like_count }}</span>
           </template>
         </van-cell>
         <van-cell title="全部回复" class="allInfo"></van-cell>
@@ -56,9 +56,9 @@
           <template #default>
             <van-icon
               name="good-job-o"
-              :class="{ loveBtn: replyisLiking === true }"
+              :class="{ loveBtn: item.is_liking === true }"
             />
-            <span @click="likeFnIn">赞</span>
+            <span @click="likeFnIn(item.com_id, item.is_liking)">赞</span>
           </template>
         </van-cell>
       </van-cell-group>
@@ -105,13 +105,11 @@ export default {
     return {
       Listloading: false,
       finished: false,
-      isLiking: '',
+      isLiking: false,
       // 评论的ID
       commentId: '',
       // 全部评论的数据
       allComments: [],
-      // 回复点赞
-      replyisLiking: false,
       // 显示弹框
       showPop: false,
       // 回复内容
@@ -123,18 +121,14 @@ export default {
     commentList: {
       type: Object
     },
-    num: {
-      type: [String, Number]
-    },
     id: {
       type: [String, Number]
     }
   },
   created() {
-    console.log(this.commentList)
     // 获取评论id
     this.commentId = this.commentList.com_id
-    // 获取点赞数量
+    // 获取外部评论点赞状态
     this.isLiking = this.commentList.is_liking
     // 获取文章回复
     this.getArtistComment()
@@ -146,7 +140,6 @@ export default {
     },
     // 点赞
     async likeFn() {
-      console.log(this.id)
       if (!this.isLiking) {
         try {
           await commitLikings(this.id)
@@ -171,41 +164,36 @@ export default {
       // console.log(this.ArticleId)
       const { data } = await getcomment('c', this.commentId)
       this.allComments = data.data.results
-      console.log(data)
       this.totalCount = data.data.total_count
     },
     // 评论回复的时间计算
     pubdateData(item) {
-      // const art = this.commentList
       const time = dayjs(item).fromNow()
       return time
     },
     // 回复点赞
-    async likeFnIn() {
-      console.log(this.id)
-      if (!this.replyisLiking) {
+    async likeFnIn(id, isLike) {
+      if (!isLike) {
         try {
-          await commitLikings(this.id)
+          await commitLikings(id)
           this.$toast.success('点赞成功')
-          this.replyisLiking = true
         } catch (error) {
           console.log(error)
         }
       } else {
         // 取消点赞
         try {
-          await delCommitLikings(this.id)
-          this.replyisLiking = false
+          await delCommitLikings(id)
           this.$toast('点赞取消')
         } catch (error) {
           console.log(error)
         }
       }
+      this.getArtistComment()
     },
     // 点击显示弹框
     isShowPop() {
       this.showPop = true
-      console.log(this.showPop)
     },
     // 发布回复
     async releaseFn() {
@@ -231,6 +219,9 @@ export default {
       const art = this.commentList
       const time = dayjs(art.pubdate).fromNow()
       return time
+    },
+    count() {
+      return this.allComments.length
     }
   }
 }
