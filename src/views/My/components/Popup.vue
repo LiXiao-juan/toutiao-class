@@ -1,7 +1,7 @@
 <template>
   <div>
-    <img :src="imgSrc" alt="" ref="img" />
-    <div class="position">
+    <div style="margin-top: 80px; background-color: #000 ; height: 100%;">
+      <img :src="imgSrc" alt="" ref="img" style="width: 375px; height: 480px" />
       <span @click="imgConfirm" class="confirm">确认</span>
       <span @click="imgCancel" class="cancel">取消</span>
     </div>
@@ -42,7 +42,7 @@ export default {
     imgCancel() {
       // this.$parent.isShowImg = false
       // console.log(this.$parent.isShowImg)
-      this.$emit('change', false)
+      this.$emit('change')
       // location.reload()
     }
   }
@@ -50,23 +50,20 @@ export default {
 </script>
 
 <style scoped lang="less">
-.position {
-  position: relative;
-  .confirm {
-    position: absolute;
-    z-index: 999;
-    right: 20%;
-    bottom: -10%;
-    color: #fff;
-    font-size: 30px;
-  }
-  .cancel {
-    position: absolute;
-    z-index: 999999;
-    left: 20%;
-    bottom: -10%;
-    color: #fff;
-    font-size: 30px;
-  }
+.confirm {
+  position: fixed;
+  z-index: 999;
+  right: 0;
+  bottom: 0;
+  color: #fff;
+  font-size: 30px;
+}
+.cancel {
+  position: fixed;
+  z-index: 99999;
+  left: 0;
+  bottom: 0;
+  color: #fff;
+  font-size: 30px;
 }
 </style>

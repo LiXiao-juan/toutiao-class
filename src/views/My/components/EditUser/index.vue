@@ -14,8 +14,6 @@
         v-model="isShowImg"
         v-if="isShowImg"
         :transition-appear="true"
-        closeable
-        close-icon-position="bottom-left"
       >
         <UpPopup :imgSrc="imgSrc" @change="isShowImgFn"></UpPopup>
       </van-popup>
@@ -219,7 +217,7 @@ export default {
 .body {
   width: 100%;
   height: 100%;
-  background-color: #f5f7f9;
+  // background-color: #f5f7f9;
 }
 .header {
   background-color: #3296fa;

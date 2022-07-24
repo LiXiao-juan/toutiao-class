@@ -2,7 +2,7 @@
   <div>
     <!-- 弹框区域 -->
     <van-button class="commentBtn nav_Btn" round @click="isShowPop">
-  评论</van-button
+      评论</van-button
     >
     <van-popup v-model="showPop" position="bottom" :style="{ height: '20%' }">
       <van-field
@@ -14,8 +14,9 @@
         placeholder="请输入留言"
         show-word-limit
       >
-      <template #extra
-          ><span class="release" @click="releaseFn">发布</span>
+        <template #extra>
+          <span class="release" @click="releaseFn">发布</span>
+        </template>
       </van-field>
     </van-popup>
   </div>
