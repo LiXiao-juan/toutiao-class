@@ -2498,6 +2498,18 @@ cosmiconfig@^7.0.0, cosmiconfig@^7.0.1:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
+cropper@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.npmmirror.com/cropper/-/cropper-4.1.0.tgz#3c2faaa78f730a3c71814cee61e17c7a674b943f"
+  integrity sha512-dNbkWNT606oMgRQ2aYMerDnPpSVLBMTWyERDHsDwih1ahJiVpyfSM9ev/n6G4ElfRG8t0shUZ5FXLg7YtmDdBQ==
+  dependencies:
+    cropperjs "^1.5.6"
+
+cropperjs@^1.5.12, cropperjs@^1.5.6:
+  version "1.5.12"
+  resolved "https://registry.npmmirror.com/cropperjs/-/cropperjs-1.5.12.tgz#d9c0db2bfb8c0d769d51739e8f916bbc44e10f50"
+  integrity sha512-re7UdjE5UnwdrovyhNzZ6gathI4Rs3KGCBSc8HCIjUo5hO42CtzyblmWLj6QWVw7huHyDMfpKxhiO2II77nhDw==
+
 cross-spawn@^5.0.1:
   version "5.1.0"
   resolved "https://registry.npmmirror.com/cross-spawn/-/cross-spawn-5.1.0.tgz#e8bd0efee58fcff6f8f94510a0a554bbfa235449"
@@ -4175,6 +4187,11 @@ joi@^17.4.0:
     "@sideway/address" "^4.1.3"
     "@sideway/formula" "^3.0.0"
     "@sideway/pinpoint" "^2.0.0"
+
+jquery@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.npmmirror.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
+  integrity sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==
 
 js-message@1.0.7:
   version "1.0.7"

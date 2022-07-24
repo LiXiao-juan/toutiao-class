@@ -41,3 +41,29 @@ export const getUserProfile = () => {
     url: '/v1_0/user/profile'
   })
 }
+
+/**
+ *
+ * @param {String} data name:用户昵称 gender 性别 birthday：生日
+ * @returns promise
+ */
+export const editUserData = (data) => {
+  return request({
+    url: '/v1_0/user/profile',
+    method: 'PATCH',
+    data
+  })
+}
+
+/**
+ *
+ * @param {file} photo 头像
+ * @returns
+ */
+export const editUserHeadPortrait = (file) => {
+  return request({
+    url: '/v1_0/user/photo',
+    method: 'PATCH',
+    data: file
+  })
+}

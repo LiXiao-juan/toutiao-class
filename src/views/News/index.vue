@@ -41,7 +41,12 @@
     </div>
 
     <!-- 主体内容区域 -->
-    <div class="article-content markdown-body" v-html="article.content" id="article-content"></div>
+    <div
+      class="article-content markdown-body"
+      v-html="article.content"
+      id="article-content"
+      ref="contentText"
+    ></div>
 
     <van-divider>正文结束</van-divider>
 
@@ -113,7 +118,7 @@
 </template>
 
 <script>
-// import { ImagePreview } from 'vant'
+import { ImagePreview } from 'vant'
 import getCommentItem from './components/commentsItem.vue'
 import './news.css'
 import dayjs from '@/utils/dayjs'
@@ -169,29 +174,7 @@ export default {
   },
 
   // 图片预览
-  // mounted() {
-  //   this.$nextTick(() => {
-  //     // getElementById动态获取出的所有的img元素
-  //     this.imgList = document
-  //       .getElementById('acticle-content')
-  //       .querySelectorAll('img')
-  //     // 声明空数组---vant组件使用
-  //     const imgSrc = []
-  //     this.imgList.forEach((item, index) => {
-  //       // 将每一个img的src 路径存到空数组
-  //       imgSrc.push(item.src)
-  //       // 给每一个img元素绑定点击事件触发预览
-  //       item.addEventListener('click', () => {
-  //         console.log(1111)
-  //         ImagePreview({
-  //           images: imgSrc,
-  //           closeable: true,
-  //           startPosition: index
-  //         })
-  //       })
-  //     })
-  //   })
-  // },
+  mounted() {},
   methods: {
     // 收藏
     async star() {
@@ -215,6 +198,28 @@ export default {
       try {
         const { data } = await getArticlesInfo(this.$store.state.ArtId)
         this.article = data.data
+
+        this.$nextTick(() => {
+          // getElementById动态获取出的所有的img元素
+          this.imgList = this.$refs.contentText.querySelectorAll('img')
+          console.log(this.imgList)
+          // 声明空数组---vant组件使用
+          const imgSrc = []
+          this.imgList.forEach((item, index) => {
+            // 将每一个img的src 路径存到空数组
+            imgSrc.push(item.src)
+            // 给每一个img元素绑定点击事件触发预览
+            item.addEventListener('click', () => {
+              console.log(1111)
+              ImagePreview({
+                images: imgSrc,
+                closeable: true,
+                startPosition: index
+              })
+            })
+          })
+        })
+
         // 获取文章最初的收藏状态
         this.isCollect = data.data.is_collected
         console.log(this.article)
